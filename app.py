@@ -11,5 +11,5 @@ def hello():
 def products():
     return 'This is a product page'
 
-if __name__ == '__main__':    
-    app.run(debug = True)
+# if __name__ == '__main__':    
+app.run(debug = True)
