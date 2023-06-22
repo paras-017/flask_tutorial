@@ -18,15 +18,28 @@ class Todo(db.Model):
 
     def __repr__(self) -> str:      #The  purpose of __repr__ is to provide a helpful and unambiguous representation of an object for debugging purposes
         return f"{self.sno} - {self.title}"
+
+#creating the database
 db.create_all()
 
 @app.route('/')
 def hello():
-    # return 'Hello World!'
-    return render_template('index.html')
 
-@app.route('/products')
-def products():
+
+     # creating a todo
+    todo = Todo(title = 'Test - 2', description = 'This is a test - 2')
+    # adding the todo to the database
+    db.session.add(todo)
+    db.session.commit()
+
+    #getting all the todos from DB & sending them to the frontend
+    allTodo = Todo.query.all()
+    return render_template('index.html', allTodo = allTodo)
+
+@app.route('/show')
+def show():
+    # allTodo = Todo.query.all()
+    # print(allTodo)
     return 'This is a product page'
 
 # if __name__ == '__main__':    
