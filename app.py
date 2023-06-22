@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -22,17 +22,22 @@ class Todo(db.Model):
 #creating the database
 db.create_all()
 
-@app.route('/')
+@app.route('/', methods = ['GET', 'POST'])
 def hello():
+   #accepting data from UI
+    if request.method == 'POST':
+        print('post')
+        title = request.form['title']
+        description = request.form['description']
+        print(title, description)
 
+        # creating a todo
+        todo = Todo(title = title, description = description)
+        # adding the todo to the database
+        db.session.add(todo)
+        db.session.commit()
 
-     # creating a todo
-    todo = Todo(title = 'Test - 2', description = 'This is a test - 2')
-    # adding the todo to the database
-    db.session.add(todo)
-    db.session.commit()
-
-    #getting all the todos from DB & sending them to the frontend
+        #getting all the todos from DB & sending them to the frontend
     allTodo = Todo.query.all()
     return render_template('index.html', allTodo = allTodo)
 
