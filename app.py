@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -46,6 +46,19 @@ def show():
     # allTodo = Todo.query.all()
     # print(allTodo)
     return 'This is a product page'
+
+@app.route('/edit')
+def edit():
+    # allTodo = Todo.query.all()
+    # print(allTodo)
+    return 'This is a product page'
+
+@app.route('/delete/<int:sno>')
+def delete(sno):
+    todo = Todo.query.filter_by(sno = sno).first()
+    db.session.delete(todo)
+    db.session.commit()
+    return redirect('/')
 
 # if __name__ == '__main__':    
 app.run(debug = True)
