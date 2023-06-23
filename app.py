@@ -26,7 +26,6 @@ db.create_all()
 def hello():
    #accepting data from UI
     if request.method == 'POST':
-        print('post')
         title = request.form['title']
         description = request.form['description']
         print(title, description)
@@ -37,7 +36,7 @@ def hello():
         db.session.add(todo)
         db.session.commit()
 
-        #getting all the todos from DB & sending them to the frontend
+    #getting all the todos from DB & sending them to the frontend
     allTodo = Todo.query.all()
     return render_template('index.html', allTodo = allTodo)
 
@@ -47,11 +46,19 @@ def show():
     # print(allTodo)
     return 'This is a product page'
 
-@app.route('/edit')
-def edit():
-    # allTodo = Todo.query.all()
-    # print(allTodo)
-    return 'This is a product page'
+@app.route('/edit/<int:sno>', methods = ['GET','POST'])
+def edit(sno):
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        todo = Todo.query.filter_by(sno = sno).first() 
+        todo.title = title
+        todo.description = description
+        db.session.add(todo)
+        db.session.commit()
+        return redirect('/')
+    todo = Todo.query.filter_by(sno = sno).first()
+    return render_template('update.html', todo = todo)
 
 @app.route('/delete/<int:sno>')
 def delete(sno):
